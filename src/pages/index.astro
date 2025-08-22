@@ -1,11 +1,428 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
-<Layout>
-	<Welcome />
+<Layout title="romainwsite — Creative developer">
+  <section class="relative overflow-visible">
+    <!-- En-tête au-dessus -->
+<p class="romain-wsite">
+  ROMAIN<br>WSITE
+</p>
+
+
+
+    <!-- HERO -->
+    <main
+      class="hero hero--tight"
+      id="hero"
+      style="--perspective-x:0; --perspective-y:0;"
+    >
+      <!-- TITRES -->
+      <div class="hero__titles" aria-hidden="true">
+        <h1 class="hero__title hero__title--top">Creative</h1>
+        <h1 class="hero__title hero__title--bottom">developer</h1>
+      </div>
+
+<!-- Texte changeant -->
+<div class="creative-developer">
+  <div id="changing-text-container">
+    <p class="changing-text textechangant">Je conçois des sites web créatifs et accessibles qui marquent les esprits.</p>
+    <p class="changing-text textechangant">Développeur créatif freelance, disponible à partir d'août 2025.</p>
+    <p class="changing-text textechangant">Je transforme vos designs en expériences immersives et engageantes.</p>
+    <p class="changing-text textechangant">J'aide les entreprises à booster leur visibilité et à se démarquer.</p>
+  </div>
+</div>
+
+
+      <!-- EMOTES -->
+      <div class="emotes" id="emotes" aria-hidden="true">
+        <div class="emote" data-r="170" data-speed="0.65"><img src="/emotes/ampoule.svg" width="28" height="28" alt="" /></div>
+        <div class="emote" data-r="230" data-speed="-0.50"><img src="/emotes/curseur-main.svg" width="28" height="28" alt="" /></div>
+        <div class="emote" data-r="210" data-speed="0.80"><img src="/emotes/globe.svg" width="28" height="28" alt="" /></div>
+        <div class="emote" data-r="260" data-speed="-0.55"><img src="/emotes/bulle-de-chat.svg" width="28" height="28" alt="" /></div>
+        <div class="emote" data-r="200" data-speed="0.70"><img src="/emotes/vrai-lien.svg" width="28" height="28" alt="" /></div>
+        <div class="emote" data-r="240" data-speed="-0.45"><img src="/emotes/palette.svg" width="28" height="28" alt="" /></div>
+      </div>
+    </main>
+  </section>
+
+  <!-- Overrides spécifiques à la home -->
+  <style>
+    :root{
+      /* ACL */
+      --acl-pastel:#EDE9FE; --acl-dark:#4C1D95;
+      /* Oasis */
+      --oasis-pastel:#FBE4C4; --oasis-dark:#7C3F00;
+      /* Prince Palace */
+      --pp-pastel:#FDF6EC; --pp-dark:#3C2F2F;
+      /* BCS */
+      --bcs-pastel:#FFF8DC; --bcs-dark:#B8860B;
+      /* SMOD/Smood */
+      --smod-pastel:#FDE2E4; --smod-dark:#1F2937;
+    }
+
+    /* remonter fortement le hero */
+    .hero.hero--tight {
+      place-items: start center !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      margin-top: clamp(4vh, -14vw, -10vh);
+    }
+    .halo--ring { position: absolute; inset: 0; display: grid !important; place-items: center; pointer-events: none; z-index: 0; }
+    .halo--ring svg { width: min(1200px, 92vw); }
+    .hero__titles { position: relative; z-index: 1; margin: 0 !important; }
+    .hero__title { margin: 0 !important; }
+    .hero__title--top { padding-top: 0 !important; }
+    .hero__title--bottom { padding-bottom: 0 !important; margin-top: 0.04em; }
+    .hero { overflow: visible !important; }
+
+    /* Texte changeant */
+    .creative-developer { text-align: center; margin-top: 30px; }
+    #changing-text-container { margin-top: -140px; font-size: 1.2rem; color: #6A63E5; }
+    .changing-text { display: none; font-size: 1.2rem; font-weight: bold; color: #6A63E5; }
+
+    /* Sous-titre fixe */
+    .fixed-subtitle{
+      position:relative; z-index:10; text-align:center; font-weight:900; letter-spacing:.2em; color:#6A63E5; margin-top:16px;
+    }
+    .hero{ position:relative; z-index:0; overflow:visible !important; }
+    .hero__titles{ position:relative; z-index:1; }
+    .emotes{ position:absolute; z-index:3; pointer-events:none; }
+    .fixed-subtitle {
+      position: absolute; top: 700px; left: 50%; transform: translateX(-50%); z-index: 20; text-align: center; font-weight: 900; letter-spacing: 0.2em; color: #6A63E5;
+      pointer-events: none;
+    }
+    .fixed-subtitle .line-main, .fixed-subtitle .line-sub { font-size: 3rem; margin: 0; }
+
+    /* === Cartes projets (pile) === */
+    .stack {
+      position: relative;
+      width: 450px;
+      height: 280px;
+      margin: 150px auto 100px;
+      perspective: 800px;
+      overflow: visible;
+      z-index: 30;
+    }
+    .card {
+      position: absolute; inset: 0;
+      padding: 1rem;
+      border-radius: 1rem;
+      background: #f6f3e7; /* fallback */
+      box-shadow: 0 2rem 3rem rgba(0,0,0,.15);
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      overflow: hidden;
+      transform-origin: center center;
+      backface-visibility: hidden;
+      will-change: transform, opacity;
+      transform:
+        translateY(calc(var(--index, 0) * -3rem))
+        rotate(calc(var(--index, 0) * -8deg))
+        scale(calc(1 - var(--index, 0) * 0.05));
+      transition: transform .7s cubic-bezier(0.22, 1, 0.36, 1), opacity .5s ease-out;
+      z-index: calc(100 - var(--index, 0));
+      text-decoration: none;
+    }
+    .card img { width: 100%; height: 80%; object-fit: cover; border-radius: .75rem; }
+/* Titres des cartes — style "THE KOTAVERSE" uniquement */
+.card h3{
+  margin: .5rem 0 0;
+  font-family: 'Impact', 'Arial Black', 'Anton', system-ui, sans-serif; /* gras condensé */
+  font-size: 2.25rem;          /* ajuste si tu veux plus gros */
+  text-transform: uppercase;   /* tout en majuscules */
+  font-weight: 900;            /* très gras */
+  letter-spacing: -0.02em;     /* tracking serré */
+  line-height: 1;
+  text-align: center;
+  /* la couleur reste gérée par tes thèmes data-site (rien à changer) */
+}
+
+/* (optionnel) un peu plus grand sur grands écrans */
+@media (min-width: 1024px){
+  .card h3{ font-size: 2.6rem; }
+}
+    .card.leaving { transform: translateY(-150%) rotate(-20deg) scale(0.85); opacity: 0; z-index: 1000; }
+
+    /* === Thèmes par carte (pastel = fond, dark = titre) === */
+    .card[data-site="acl"]        { background: var(--acl-pastel); }
+    .card[data-site="acl"]  h3    { color: var(--acl-dark); }
+
+    .card[data-site="bcs"]        { background: var(--bcs-pastel); }
+    .card[data-site="bcs"]  h3    { color: var(--bcs-dark); }
+
+    .card[data-site="oasis"]      { background: var(--oasis-pastel); }
+    .card[data-site="oasis"] h3   { color: var(--oasis-dark); }
+
+    .card[data-site="prince"]     { background: var(--pp-pastel); }
+    .card[data-site="prince"] h3  { color: var(--pp-dark); }
+
+    .card[data-site="smod"]       { background: var(--smod-pastel); }
+    .card[data-site="smod"]  h3   { color: var(--smod-dark); }
+
+    /* ===== Footer style Cyd-like ===== */
+    .rw-footer{ background: var(--paper, #FFF5EF); padding: clamp(24px, 4vw, 40px) 0 clamp(24px, 6vw, 64px); }
+    .rw-footer__grid{
+      display: grid; grid-template-columns: 1fr minmax(280px, 420px); align-items: start; gap: clamp(24px, 4vw, 48px);
+      max-width: 1200px; margin-inline: auto; padding-inline: clamp(16px, 4vw, 40px);
+    }
+    .rw-left .rw-name{
+      margin: 0 0 clamp(20px, 4vw, 28px);
+      font-family: "League Gothic", Impact, system-ui, sans-serif;
+      font-weight: 900; letter-spacing: .02em; line-height: .9;
+      font-size: clamp(48px, 14vw, 180px);
+      color: color-mix(in oklab, #6A63E5 85%, white);
+    }
+    .rw-block{ margin: 16px 0; }
+    .rw-block h3{ margin: 0 0 6px; font: 900 clamp(14px, 1.6vw, 18px)/1.1 system-ui, sans-serif; letter-spacing: .02em; color: #0f0f0f; text-transform: uppercase; }
+    .rw-block p{ margin: 0; font: 700 clamp(14px, 1.6vw, 18px)/1.2 system-ui, sans-serif; color: #0f0f0f; }
+    .rw-socials a{ text-decoration: underline; text-underline-offset: 2px; margin-right: 14px; color: #0f0f0f; }
+    .rw-socials a:last-child{ margin-right: 0; }
+    .rw-socials a:hover{ color: #6A63E5; }
+
+    .rw-right{ display: grid; gap: clamp(16px, 2vw, 24px); justify-items: end; text-align: right; }
+    .rw-availability{ margin: 0; font: 900 clamp(18px, 2.2vw, 28px)/1.2 system-ui, sans-serif; text-transform: uppercase; color: #0f0f0f; }
+    .rw-cta-title{ margin: 0; font: 900 clamp(16px, 2vw, 22px)/1.1 system-ui, sans-serif; text-transform: uppercase; color: #0f0f0f; }
+    .rw-cta-mail{ margin: 6px 0 0; font: 800 clamp(16px, 2vw, 22px)/1.2 system-ui, sans-serif; text-transform: uppercase; }
+    .rw-cta-mail a{ color: #0f0f0f; text-decoration: underline; text-underline-offset: 3px; }
+    .rw-arrow{ display: inline-block; margin-right: 8px; }
+    .rw-copy{ margin: clamp(24px, 3vw, 36px) 0 0; font: 900 clamp(12px, 1.6vw, 16px)/1 system-ui, sans-serif; color: #0f0f0f; }
+    @media (max-width: 840px){
+      .rw-footer__grid{ grid-template-columns: 1fr; }
+      .rw-right{ justify-items: start; text-align: left; }
+    }
+  </style>
+
+  <!-- Script : perspective + orbite des émojis -->
+  <script type="module">
+    (() => {
+      const hero = document.getElementById('hero');
+      if (!hero || hero.dataset.heroInit === '1') return;
+      hero.dataset.heroInit = '1';
+
+      const titles = hero.querySelector('.hero__titles') || hero;
+      const emoteLayer = hero.querySelector('#emotes, .emotes');
+      const emotes = emoteLayer ? [...emoteLayer.querySelectorAll('.emote')] : [];
+      if (!emotes.length) return;
+
+      const TWO_PI = Math.PI * 2;
+      const yLift = -30;
+      const vScale = 0.55;
+
+      let cxLocal = 0, cyLocal = 0;
+      function measure(){
+        const t = titles.getBoundingClientRect();
+        const h = hero.getBoundingClientRect();
+        cxLocal = (t.left + t.width/2) - h.left;
+        cyLocal = (t.top  + t.height/2) - h.top;
+      }
+      measure();
+      addEventListener('resize', measure, { passive: true });
+
+      const orbit = emotes.map(el => ({
+        el, a: Math.random() * TWO_PI,
+        r: parseFloat(el.dataset.r || 200),
+        s: parseFloat(el.dataset.speed || 0.5),
+      }));
+
+      const target = { x: 0, y: 0 }, state = { x: 0, y: 0 };
+
+      function onPointerMove(e){
+        const r = hero.getBoundingClientRect();
+        const nx = (e.clientX - (r.left + r.width/2)) / (r.width/2);
+        const ny = (e.clientY - (r.top  + r.height/2)) / (r.height/2);
+        const factor = 4;
+        hero.style.setProperty('--perspective-x', (nx * factor).toFixed(3));
+        hero.style.setProperty('--perspective-y', (ny * factor).toFixed(3));
+        target.x = nx * 60; target.y = ny * 40;
+      }
+      function onLeave(){ hero.style.setProperty('--perspective-x', 0); hero.style.setProperty('--perspective-y', 0); target.x = 0; target.y = 0; }
+      hero.addEventListener('pointermove', onPointerMove, { passive: true });
+      hero.addEventListener('pointerleave', onLeave, { passive: true });
+
+      function positionAll(offsetX = 0, offsetY = 0){
+        orbit.forEach(o => {
+          const x = cxLocal + Math.cos(o.a) * o.r + offsetX * 0.2;
+          const y = cyLocal + Math.sin(o.a) * (o.r * vScale) + offsetY * 0.2 + yLift;
+          o.el.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+        });
+      }
+      let last = performance.now();
+      function tick(now){
+        const dt = Math.min(0.032, (now - last) / 1000); last = now;
+        const k = 8;
+        state.x += (target.x - state.x) * Math.min(1, k * dt);
+        state.y += (target.y - state.y) * Math.min(1, k * dt);
+        orbit.forEach(o => { o.a += o.s * dt; });
+        positionAll(state.x, state.y);
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    })();
+  </script>
+
+  <!-- Script : texte changeant -->
+  <script>
+    const textes = [
+      "Je conçois des sites web créatifs et accessibles qui marquent les esprits.",
+      "Développeur créatif freelance, disponible à partir d'août 2025.",
+      "Je transforme vos designs en expériences immersives et engageantes.",
+      "J'aide les entreprises à booster leur visibilité et à se démarquer."
+    ];
+    let index = 0;
+    const elements = document.querySelectorAll('.changing-text');
+    function changerTexte() {
+      elements.forEach(el => el.style.display = 'none');
+      if (elements[index]) elements[index].style.display = 'block';
+      index = (index + 1) % textes.length;
+    }
+    changerTexte();
+    setInterval(changerTexte, 2000);
+  </script>
+
+ <!-- Bloc "Travaux sélectionnés" -->
+<div class="fixed-subtitle">
+  <p class="line-main travaux-texte">Travaux</p>
+  <p class="line-sub travaux-texte">sélectionnés</p>
+</div>
+
+
+  <!-- Pile de cartes -->
+  <div class="stack">
+    <a href="https://acl-academy.carrd.co/" target="_blank" class="card" data-site="acl" aria-label="ACL Academy">
+      <img src="/images-sites-web/ACL.png" alt="ACL">
+      <h3>ACL</h3>
+    </a>
+
+    <a href="https://bcs-escrime.fr/" target="_blank" class="card" data-site="bcs" aria-label="BCS Escrime">
+      <img src="/images-sites-web/BCS.png" alt="BCS">
+      <h3>BCS</h3>
+    </a>
+
+    <a href="https://oasisdesdeserts.webflow.io/" target="_blank" class="card" data-site="oasis" aria-label="Oasis des Déserts">
+      <img src="/images-sites-web/Oasis.png" alt="Oasis">
+      <h3>Oasis</h3>
+    </a>
+
+    <a href="https://princepalace.fr/" target="_blank" class="card" data-site="prince" aria-label="Prince Palace">
+      <img src="/images-sites-web/Prince-palace.png" alt="Prince Palace">
+      <h3>Prince Palace</h3>
+    </a>
+
+    <a href="https://smodparis.com/" target="_blank" class="card" data-site="smod" aria-label="SMOD Paris">
+      <img src="/images-sites-web/Smood.png" alt="Smood">
+      <h3>Smood</h3>
+    </a>
+  </div>
+
+  <!-- JS : carrousel circulaire des cartes -->
+  <script>
+    (function () {
+      const stack = document.querySelector('.stack');
+      if (!stack) return;
+      const cards = Array.from(stack.querySelectorAll('.card'));
+      if (!cards.length) return;
+
+      function updateStack() {
+        cards.forEach((card, i) => {
+          if (card.classList.contains('leaving')) return;
+          card.style.setProperty('--index', i);
+        });
+      }
+      updateStack();
+
+      let isAnimating = false;
+      let wheelAcc = 0;
+      const STEP_THRESHOLD = 70;
+      const TRANSITION_MS = 700;
+
+      function next() {
+        if (isAnimating || !cards.length) return;
+        isAnimating = true;
+
+        const leaving = cards.shift();
+        leaving.classList.add('leaving');
+        leaving.style.zIndex = 1000;
+
+        updateStack();
+
+        const onEnd = (ev) => {
+          if (ev.propertyName !== 'transform') return;
+          leaving.classList.remove('leaving');
+          leaving.style.zIndex = '';
+          cards.push(leaving);
+          updateStack();
+          isAnimating = false;
+          leaving.removeEventListener('transitionend', onEnd);
+        };
+        leaving.addEventListener('transitionend', onEnd);
+      }
+
+      function prev() {
+        if (isAnimating || !cards.length) return;
+        isAnimating = true;
+        const coming = cards.pop();
+        cards.unshift(coming);
+        updateStack();
+        setTimeout(() => { isAnimating = false; }, TRANSITION_MS);
+      }
+
+      stack.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        if (isAnimating) return;
+        wheelAcc += e.deltaY;
+        if (Math.abs(wheelAcc) >= STEP_THRESHOLD) {
+          wheelAcc > 0 ? next() : prev();
+          wheelAcc = 0;
+        }
+      }, { passive: false });
+
+      stack.tabIndex = 0;
+      stack.addEventListener('keydown', (e) => {
+        if (isAnimating) return;
+        if (e.key === 'ArrowDown' || e.key === 'PageDown') next();
+        if (e.key === 'ArrowUp'   || e.key === 'PageUp')   prev();
+      });
+    })();
+  </script>
+
+  <!-- Footer Cyd-like personnalisé -->
+  <section class="rw-footer">
+    <div class="rw-footer__grid container-xl">
+      <!-- Colonne gauche -->
+      <div class="rw-left">
+        <h2 class="rw-name">ROMAINWSITE</h2>
+
+        <div class="rw-block">
+          <h3>JOURS DE TRAVAIL</h3>
+          <p>LUNDI – DIMANCHE</p>
+        </div>
+
+        <div class="rw-block">
+          <h3>RÉSEAUX SOCIAUX</h3>
+          <p class="rw-socials">
+            <a href="https://www.instagram.com/romainwsite/" target="_blank" aria-label="Instagram">INSTAGRAM</a>
+            <a href="https://www.linkedin.com/in/romainwsite/" target="_blank" aria-label="LinkedIn">LINKEDIN</a>
+            <a href="https://www.facebook.com/people/Romain-Wsite-Sites-Web-pour-TPE-Ind%C3%A9pendants/61579364210314/" target="_blank" aria-label="Facebook">FACEBOOK</a>
+            <a href="https://wa.me/33650959363" target="_blank" aria-label="WhatsApp">WHATSAPP</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- Colonne droite -->
+      <div class="rw-right">
+        <p class="rw-availability">DISPONIBLE EN AOÛT 2025</p>
+
+        <div class="rw-cta">
+          <p class="rw-cta-title">UN PROJET EN TÊTE&nbsp;?</p>
+          <p class="rw-cta-mail">
+            <span class="rw-arrow">→</span>
+            <a href="mailto:contact@romainwsite.com">CONTACT@ROMAINWSITE.COM</a>
+          </p>
+        </div>
+
+        <p class="rw-copy">© 2025 ROMAINWSITE</p>
+      </div>
+    </div>
+  </section>
 </Layout>

@@ -1,22 +1,150 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+import '../styles/global.css';
+const { title = 'romainwsite — portfolio' } = Astro.props;
+---
+<html lang="fr" class="bg-[#fff5ef] text-[#4b43c6]">
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+    <!-- Police condensée pour le logo / titres -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic:wght@400&display=swap" rel="stylesheet">
+
+    <style>
+      /* Grain global */
+      .grain:before{
+        content:""; position:fixed; inset:0; pointer-events:none; opacity:.08; mix-blend-mode:multiply;
+      }
+
+      :root{ --ink:#6a63e5; --paper:#fff5ef; }
+
+      /* ===== HERO: jamais de halo, jamais de fond ===== */
+      .hero{
+        position:relative; height:100svh; display:grid; place-items:center;
+        overflow:hidden; perspective:1200px;
+        --tx:0px; --ty:0px; /* MAJ par JS */
+        background: transparent !important;        /* << bloque toute nappe */
+      }
+      .halo{ display:none !important; }            /* << cache l’ellipse pour de bon */
+
+      .title-wrap{
+        position:relative;
+        transform: translate3d(var(--tx), var(--ty), 0)
+                   rotateX(calc(var(--ty)*-0.02deg))
+                   rotateY(calc(var(--tx)*0.02deg));
+        will-change: transform;
+      }
+      .word{
+        font-family:"League Gothic", system-ui, sans-serif;
+        font-size: clamp(3.5rem, 16vw, 24rem);
+        line-height:.8; text-transform:uppercase; letter-spacing:.02em; text-align:center;
+        color:#f6f3ff;
+.word{ filter: drop-shadow(0 .18em 0 var(--ink)); /* pas de glow */ }
+        position:relative; display:block;
+      }
+      .word::after{
+        content:attr(data-text); position:absolute; inset:0; color:transparent;
+        -webkit-text-stroke: clamp(6px, 1.1vw, 18px) var(--ink); z-index:-1;
+      }
+
+      .emotes{ position:absolute; inset:0; pointer-events:none; z-index:3; }
+      .emote{
+        position:absolute; width:44px; height:44px; display:grid; place-items:center;
+        transform:translate(-50%,-50%); border-radius:10px; backdrop-filter: blur(2px);
+        color:var(--ink); background:rgba(255, 245, 239, 255);
+        box-shadow:0 6px 18px rgba(255, 245, 239, 255); font-size:24px;
+        will-change: transform;
+      }
+      .emote.px{ font-size:26px }
+      /* IMPORTANT: ne plus toucher au header ici */
+    </style>
+  </head>
+
+    <!-- HEADER (inchangé) -->
+<header class="topbar">
+  <div class="brand">RWS</div>
+  <div class="meta">
+    <a class="mail" href="mailto:contact@romainwsite.com">
+      <strong>CONTACT@ROMAINWSITE.COM</strong>
+    </a>
+    <span class="sep" aria-hidden="true"></span>
+    <span class="avail">
+      <strong>DISPONIBLE EN AOUT 2025</strong>
+    </span>
+  </div>
+  <nav class="menu">
+    <a href="/about">À PROPOS</a>
+    <a href="/work">PORTFOLIO</a>
+    <a href="/contact">CONTACT</a>
+  </nav>
+</header>
+
+
+    <slot />
+
+    <footer class="px-6 py-10 text-xs opacity-70">© {new Date().getFullYear()} Romain</footer>
+
+    <!-- Script effet: ne s’active que si #hero est présent dans la page -->
+    <script type="module">
+      const hero = document.getElementById('hero');
+      if (hero){
+        const title = document.getElementById('title');
+        const emoteLayer = document.getElementById('emotes');
+        const words = title ? [...title.querySelectorAll('.word')] : [];
+        const emotes = emoteLayer ? [...emoteLayer.querySelectorAll('.emote')] : [];
+
+        let target = {x:0,y:0}, state = {x:0,y:0};
+
+        function onPointerMove(e){
+          const r = hero.getBoundingClientRect();
+          const cx = (e.clientX - (r.left + r.width/2)) / (r.width/2);
+          const cy = (e.clientY - (r.top  + r.height/2)) / (r.height/2);
+          target.x = cx * 60; target.y = cy * 40; // amplitude
+        }
+        hero.addEventListener('pointermove', onPointerMove);
+        hero.addEventListener('pointerleave', ()=>{ target.x=0; target.y=0; });
+
+        const TWO_PI = Math.PI*2;
+        const orbit = emotes.map(el=>({
+          el, a: Math.random()*TWO_PI,
+          r: parseFloat(el.dataset.r || 200),
+          s: parseFloat(el.dataset.speed || 0.5),
+        }));
+
+        let last = performance.now();
+        function tick(now){
+          const dt = Math.min(0.032, (now-last)/1000); last = now;
+
+          const k = 8; // réactivité
+          state.x += (target.x - state.x) * Math.min(1, k*dt);
+          state.y += (target.y - state.y) * Math.min(1, k*dt);
+
+          hero.style.setProperty('--tx', state.x.toFixed(2)+'px');
+          hero.style.setProperty('--ty', state.y.toFixed(2)+'px');
+
+          if (title){
+            const rect = title.getBoundingClientRect();
+            const cx = rect.left + rect.width/2;
+            const cy = rect.top  + rect.height/2;
+
+            orbit.forEach(o=>{
+              o.a += o.s * dt;
+              const x = cx + Math.cos(o.a)*o.r + state.x*0.2;
+              const y = cy + Math.sin(o.a)*o.r*0.55 + state.y*0.2;
+              o.el.style.transform = `translate(${x}px, ${y}px) translate(-50%,-50%)`;
+            });
+          }
+
+          if (words[0] && words[1]){
+            words[0].style.transform = `translate3d(${state.x*0.9}px, ${state.y*0.9}px, 0)`;
+            words[1].style.transform = `translate3d(${state.x*1.1}px, ${state.y*1.1}px, 0)`;
+          }
+          requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+    </script>
+  </body>
+</html>

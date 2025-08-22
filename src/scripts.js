@@ -1,3 +1,4 @@
+// src/scripts.js
 (() => {
   const textContainer = document.getElementById('changing-text-container');
   const texts = textContainer.querySelectorAll('.changing-text');
