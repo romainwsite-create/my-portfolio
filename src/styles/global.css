@@ -479,15 +479,271 @@ a {
   text-align: center;          /* au cas où */
   letter-spacing: 0.02em;
 }
-.travaux-texte {
-  font-family: "Montserrat", system-ui, sans-serif;
-  font-weight: 700;           /* gras */
-  text-transform: uppercase;  /* majuscules */
-  color: #6A63E5;
+.portfolio-section {
+  margin-top: -8rem;   /* espace après le texte changeant */
   text-align: center;
-  letter-spacing: 0.02em;
-  margin: 0;
-  font-size: clamp(0.5rem, 1vw, 1rem); /* moitié plus petit qu'avant */
 }
 
+.portfolio-title {
+  margin-bottom: 2rem;
+}
+
+.portfolio-title .line-main,
+.portfolio-title .line-sub {
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-weight: 700;           /* gras Montserrat */
+  text-transform: uppercase;  /* tout en majuscules */
+  letter-spacing: 0.03em;     /* léger espacement */
+  color: #6A63E5;
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem); /* responsive, gros mais pas trop */
+  line-height: 1.1;           /* un peu serré verticalement */
+}
+
+/* Texte changeant : garder l’effet sans casser le layout */
+.creative-developer{
+  text-align: center;
+  margin-top: 30px;
+  height: 56px;                 /* réserve d’espace visible (ajuste 48–72px si besoin) */
+  position: relative;
+}
+
+/* IMPORTANT: on annule le margin négatif et on fait un décalage visuel propre */
+#changing-text-container{
+  margin-top: 0 !important;     /* ⛔ stop au -140px */
+  position: absolute;           /* on l’ancre dans la zone réservée */
+  inset: 0;                     /* rempli la zone de 56px */
+  display: grid;
+  place-items: center;
+  transform: translateY(-20px); /* remonte visuellement sans impacter le flux */
+}
+
+/* Section Travaux + Titre (dans le flux, ne chevauche plus) */
+.portfolio-section {
+  /* tu peux remettre ton offset ici si tu veux le remonter un peu */
+  margin-top: 3rem;             /* ajuste au besoin, toujours POSITIF */
+  text-align: center;
+}
+
+.portfolio-title {
+  margin-bottom: 2rem;
+}
+
+.portfolio-title .line-main,
+.portfolio-title .line-sub {
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #6A63E5;
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.1;
+}
+/* --- RESET des règles conflictuelles --- */
+.fixed-subtitle { 
+  position: static !important; 
+  top:auto !important; left:auto !important; 
+  transform:none !important; 
+  margin:0 !important; 
+}
+#changing-text-container{
+  margin-top:0 !important;
+  position: static !important;
+  transform:none !important;
+}
+
+/* --- Texte changeant : zone propre et stable --- */
+.creative-developer{
+  text-align:center;
+  padding: clamp(12px, 3vh, 40px) 0;   /* espace au-dessus et en dessous */
+  min-height: 48px;                    /* évite que ça touche le titre en dessous */
+}
+.changing-text{
+  display:none;
+  font: 700 clamp(14px, 2.2vw, 22px)/1.35 "Montserrat", system-ui, sans-serif;
+  color:#6A63E5;
+}
+.changing-text.textechangant{ display:block; } /* si tu affiches la 1ère via JS, garde */
+
+/* --- Section Travaux --- */
+.portfolio-section{
+  margin-top: clamp(24px, 6vh, 80px);  /* espace après le texte changeant */
+  text-align:center;
+}
+.portfolio-title{
+  margin: 0 0 clamp(20px, 5vh, 40px);
+  line-height:1.1;
+}
+.portfolio-title span{
+  font-family:"Montserrat", system-ui, sans-serif;
+  font-weight:700;                     /* gras Montserrat */
+  text-transform:uppercase;
+  letter-spacing:.03em;
+  color:#6A63E5;
+  font-size: clamp(28px, 5vw, 56px);   /* responsive */
+}
+
+/* Espace pour ne pas que les cartes chevauchent le titre */
+.stack{
+  margin: clamp(16px, 4vh, 32px) auto 100px; /* ajuste la marge haute si besoin */
+  /* tes styles existants de .stack restent */
+}
+#changing-text-container {
+  margin-top: -5em; /* remonte le texte qui change */
+}
+
+.portfolio-section {
+  margin-top: -5em; /* remonte Travaux Sélectionnés */
+}
+#changing-text-container {
+  margin-top: -5em; /* remonte le bloc du texte qui change */
+}
+
+/* === OVERRIDE FINAL : texte changeant au bon endroit === */
+.creative-developer {
+  position: relative !important;
+  /* réserve verticale pour le bloc (ajuste au besoin) */
+  height: 56px !important;
+  margin-top: 0 !important;
+  padding: 0 !important;
+  text-align: center !important;
+}
+
+.creative-developer > #changing-text-container {
+  position: absolute !important;
+  inset: 0 !important;                 /* occupe la zone de 56px */
+  display: grid !important;
+  place-items: center !important;
+  margin: 0 !important;
+  transform: translateY(-5rem) !important;  /* ⬅ remonte le texte */
+}
+
+/* garder un espace régulier avant "Travaux sélectionnés" */
+.portfolio-section {
+  margin-top: clamp(24px, 6vh, 80px) !important;
+}
+
+/* (optionnel) un peu moins de remontée sur mobile */
+@media (max-width: 768px){
+  .creative-developer > #changing-text-container {
+    transform: translateY(-3rem) !important;
+  }
+}
+/* Centrage parfait du texte changeant */
+.creative-developer > #changing-text-container {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -5rem) !important; /* -50% centre, -5rem remonte */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100%;   /* pour que le texte reste bien centré */
+  text-align: center;
+}
+/* === Texte changeant : 1 seule ligne, centré, largeur pleine === */
+.creative-developer {
+  text-align: center;
+}
+
+#changing-text-container {
+  width: 100%;           /* prend toute la largeur */
+  max-width: none;       /* aucune limite */
+  overflow: visible;     /* ne cache rien */
+}
+
+#changing-text-container p {
+  display: inline-block;        /* largeur = contenu */
+  white-space: nowrap;          /* une seule ligne */
+  margin: 0 auto;               /* centré */
+  width: fit-content;           /* pas de contrainte de largeur */
+  line-height: 1.2;
+  /* adapte la taille pour éviter les retours à la ligne */
+  font-size: clamp(16px, 2.6vw, 28px);
+}
+
+/* (optionnel) si tu veux un peu plus petit sur très petits écrans */
+@media (max-width: 480px) {
+  #changing-text-container p {
+    font-size: clamp(14px, 4.4vw, 20px);
+  }
+}
+/* Réduit l’espace entre le texte changeant et Travaux Sélectionnés */
+.portfolio-section {
+  margin-top: 1.5rem;   /* avant tu avais 3rem ou plus → réduit ici */
+  text-align: center;
+}
+.hero {
+  position: relative;
+  min-height: 80svh;  /* 60–75svh selon le rendu que tu veux */
+  height: auto;       /* laisse le contenu définir la hauteur */
+  /* … le reste inchangé … */
+}
+/* Section Travaux + Titre */
+.portfolio-section {
+  margin-top: 0.5rem !important;  /* réduis l’espace (teste 1rem, 2rem, etc.) */
+  text-align: center;
+}
+/* Section Travaux + Titre */
+.portfolio-section {
+  margin-top: 1.5rem !important;  /* réduis l’espace (teste 1rem, 2rem, etc.) */
+  text-align: center;
+}
+/* --- RÉDUIRE LA HAUTEUR DU HERO pour rapprocher "Travaux sélectionnés" --- */
+.hero {
+  height: auto !important;      /* on n’impose plus 100svh */
+  min-height: 0 !important;     /* on annule 80svh */
+  padding-bottom: 0 !important; /* évite l’espace résiduel */
+}
+
+/* Petit espace seulement entre le texte changeant et le titre */
+.portfolio-section {
+  margin-top: 0.75rem !important;  /* ajuste: 0 / 0.5rem / 1rem… */
+}
+
+/* (optionnel) si tu veux quand même un hero un peu “haut” sur desktop */
+@media (min-width: 1024px) {
+  .hero {
+    min-height: 55svh !important; /* ou 50–60svh selon ton goût */
+  }
+}
+/* Décale vers le bas le texte changeant et le bloc Travaux sélectionnés */
+.creative-developer {
+  margin-top: 2em !important;   /* descend le texte changeant */
+}
+
+.portfolio-section {
+  margin-top: calc(3rem + 4em) !important;  /* descend aussi Travaux sélectionnés */
+}
+
+/* --- OVERRIDE FINAL DESCENTE --- */
+
+/* Descend le texte changeant */
+.creative-developer > #changing-text-container {
+  transform: translate(-50%, -0rem) !important;  /* avant -5rem, maintenant -3rem */
+}
+
+/* Descend "Travaux sélectionnés" */
+.portfolio-section {
+  margin-top: 5rem !important;   /* augmente un peu l’espace */
+}
+/* --- OVERRIDE FINAL : réduire la taille du texte changeant --- */
+#changing-text-container p {
+  font-size: clamp(14px, 1.8vw, 22px) !important; /* plus petit */
+  line-height: 1.2;
+}
+.portfolio-title span {
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;   /* identique */
+  color: #6A63E5;
+  font-size: clamp(1.5rem, 4vw, 3rem); /* identique */
+  line-height: 1;          /* identique */
+  margin: 0;
+}
+.stack {
+  margin-top: 15em !important; /* décale vers le bas tout ce qui est en dessous */
+}
 

@@ -277,15 +277,15 @@ import Layout from '../layouts/Layout.astro';
       index = (index + 1) % textes.length;
     }
     changerTexte();
-    setInterval(changerTexte, 2000);
+    setInterval(changerTexte, 4000);
   </script>
 
  <!-- Bloc "Travaux sélectionnés" -->
-<div class="fixed-subtitle">
-  <p class="line-main travaux-texte">Travaux</p>
-  <p class="line-sub travaux-texte">sélectionnés</p>
-</div>
-
+<section class="portfolio-section">
+  <h2 class="portfolio-title">
+    <span>Travaux</span><br />
+    <span>Sélectionnés</span>
+  </h2>
 
   <!-- Pile de cartes -->
   <div class="stack">
